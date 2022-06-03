@@ -11,8 +11,10 @@
 <script>
     import MutationTable from './components/MutationTable.vue';
     import SourcesModal from './components/SourcesModal.vue';
-    import mutations from '@/data/data';
+    import axios from 'axios';
     import { useStore } from 'vuex';
+    import { ref } from '@vue/reactivity';
+    import { onMounted } from '@vue/runtime-core';
 
     export default {
         name: 'App',
@@ -22,7 +24,14 @@
         },
         setup() {
             const store = useStore();
-            store.dispatch('mutations/updateMutationsAction', mutations);
+            onMounted(() => {
+                let mutations = ref();
+                axios.get(`http://localhost:3000/api/mutation`).then(response => {
+                    mutations.value = response.data;
+                    store.dispatch('mutations/updateMutationsAction', mutations);
+                });
+            });
+
             store.dispatch('sources/updateSourcesAction', 'freebayes');
         }
     };
