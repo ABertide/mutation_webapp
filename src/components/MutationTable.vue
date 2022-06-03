@@ -1,5 +1,6 @@
 <template>
     <div class="row flex justify--space-between">
+        <!-- Filtering field -->
         <va-input class="mb-4 ml-4" v-model="posFilter" label="Position filter" placeholder="..." />
         <va-input class="mb-4 ml-4" v-model="geneFilter" label="Gene filter" placeholder="..." />
         <va-input class="mb-4 ml-4" v-model="hgvspFilter" label="HGSVp filter" placeholder="..." />
@@ -11,6 +12,8 @@
         <va-input class="mb-4 ml-4" v-model="sourceFilter" label="Algorythm detector filter" placeholder="..." />
         <va-input class="mb-4 ml-4" v-model="alt_depthFilter" label="Mutation observed filter" placeholder="..." />
     </div>
+
+    <!-- Mutations Table -->
     <va-data-table :items="mutationsToTable" :columns="headers" :hoverable="true">
         <template #cell(score)="data"> <va-icon size="large" :color="data.value" name="square" /> </template>
     </va-data-table>
@@ -23,6 +26,7 @@
         setup() {
             const store = useStore();
 
+            // Filtering variables
             const posFilter = ref('');
             const geneFilter = ref('');
             const hgvspFilter = ref('');
@@ -32,6 +36,7 @@
             const sourceFilter = ref('');
             const alt_depthFilter = ref('');
 
+            // Get stored data
             const mutations = computed(() => {
                 return store.state.mutations.mutations;
             });
@@ -39,6 +44,7 @@
                 return store.state.sources.sources;
             });
 
+            // Column names
             const headers = ref([
                 { key: 'position', label: 'Position', sortable: true },
                 { key: 'gene', label: 'Gene', sortable: true },
@@ -50,37 +56,50 @@
                 { key: 'alt_depth', label: 'Mutation observed', sortable: true }
             ]);
 
+            // Data parsed for the table
             const mutationsToTable = computed(() => {
                 let mutationList = mutations.value.map(mutation => {
+                    // Each mutation (5)
                     let mutationByAnnotation = mutation.annot.map(annotation => {
+                        // Each annotation of a mutation
+                        // Get unique tags
                         let filters = [...new Set(mutation.supports.map(filter => filter.filters).flat())];
+                        // Get unique sources
                         let sources = [...new Set(mutation.supports.map(filter => filter.source))];
+
+                        // Get Mutation observed for the choosen source
                         let alt_depth = mutation.supports.filter(filter => {
                             if (filter.source === sourceStored.value) {
                                 return filter;
                             }
                         });
+
+                        // Get highest frequency
                         let pop_AF = 'Undefined';
                         if (Math.abs(Math.max(...mutation.pop_AF.map(pop => pop.AF))) !== Infinity) {
                             pop_AF = Math.max(...mutation.pop_AF.map(pop => pop.AF));
                         }
 
+                        // affected gene
                         let symbol = 'Undefined';
                         if (annotation.subject.symbol !== null) {
                             symbol = annotation.subject.symbol;
                         }
+
+                        // norf
                         let HGVSp = 'Undefined';
                         if (annotation.changes.HGVSp !== null) {
                             HGVSp = annotation.changes.HGVSp;
                         }
 
+                        // Get color for delection score
                         const score = annotation.pathogenicity.CADD_phred;
                         const r = score * 8.5;
                         const g = 255 - score * 8.5;
                         const hex = rgbToHex(r, g, 0);
-                        console.log(hex);
 
                         if (alt_depth[0] !== undefined) {
+                            // Create a line
                             return {
                                 position: `${mutation.coord.region}:${mutation.coord.pos}`,
                                 gene: symbol,
@@ -129,6 +148,7 @@
             });
 
             const filterMethod = (spaceNameFilter, mutationListFlatten, spaceName) => {
+                // triggered when filter field is not empty
                 if (spaceNameFilter.value !== '') {
                     mutationListFlatten = mutationListFlatten.filter(mutation => {
                         if (mutation[spaceName] !== null && mutation[spaceName] !== 'Undefined') {
@@ -140,6 +160,7 @@
             };
 
             const rgbToHex = (r, g, b) => {
+                // Convert rgb to Hex
                 return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
             };
 

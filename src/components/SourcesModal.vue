@@ -1,4 +1,5 @@
 <template>
+    <!-- Dialog box to chose an algorythm source -->
     <div class="mb-4">Source selected: {{ selected }}</div>
     <div class="mb-4">
         <va-button @click="showModal = !showModal"> Source filter</va-button>
@@ -15,7 +16,10 @@
 
     export default {
         setup() {
+            // Hide or show Dialog box
             const showModal = ref(false);
+
+            // Get stored value
             const store = useStore();
             const mutations = computed(() => {
                 return store.state.mutations.mutations;
@@ -23,8 +27,10 @@
             const sourceStored = computed(() => {
                 return store.state.sources.sources;
             });
+
             const selected = ref(sourceStored.value);
 
+            // Get all sources
             const sources = ref(
                 [
                     ...new Set(
@@ -36,6 +42,8 @@
                     )
                 ].flat()
             );
+
+            // onChange for selected source
             watch(selected, newSelected => {
                 store.dispatch('sources/updateSourcesAction', newSelected);
             });

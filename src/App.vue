@@ -24,7 +24,9 @@
         },
         setup() {
             const store = useStore();
+
             onMounted(() => {
+                // Get mutation from dist server
                 let mutations = ref();
                 axios.get(`http://localhost:3000/api/mutation`).then(response => {
                     mutations.value = response.data;
@@ -32,6 +34,8 @@
                 });
             });
 
+            // Default value for Algorythm Source : freebayes
+            // Modify in SourcesModal component
             store.dispatch('sources/updateSourcesAction', 'freebayes');
         }
     };

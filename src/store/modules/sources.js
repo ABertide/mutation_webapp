@@ -2,10 +2,6 @@ const state = {
     sources: ''
 };
 
-// getters
-// const getters = {
-// };
-
 // actions
 const actions = {
     updateSourcesAction({ commit }, newSources) {
@@ -23,7 +19,6 @@ const mutations = {
 export default {
     namespaced: true,
     state,
-    // getters,
     mutations,
     actions
 };

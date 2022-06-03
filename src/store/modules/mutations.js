@@ -2,10 +2,6 @@ const state = {
     mutations: []
 };
 
-// getters
-// const getters = {
-// };
-
 // actions
 const actions = {
     updateMutationsAction({ commit }, newMutations) {
@@ -23,7 +19,6 @@ const mutations = {
 export default {
     namespaced: true,
     state,
-    // getters,
     mutations,
     actions
 };
