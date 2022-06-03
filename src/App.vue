@@ -1,4 +1,9 @@
 <template>
+    <va-navbar color="primary" shape class="mb-2">
+        <template #center>
+            <va-navbar-item><h1>Mutation Helper</h1></va-navbar-item>
+        </template></va-navbar
+    >
     <SourcesModal />
     <MutationTable />
 </template>
