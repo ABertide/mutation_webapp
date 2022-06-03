@@ -14,7 +14,7 @@ const actions = {
 };
 
 // sources
-const sources = {
+const mutations = {
     updateSources(state, newSources) {
         state.sources = newSources;
     }
@@ -24,6 +24,6 @@ export default {
     namespaced: true,
     state,
     // getters,
-    sources,
+    mutations,
     actions
 };

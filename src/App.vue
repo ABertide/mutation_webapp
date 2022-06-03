@@ -18,7 +18,7 @@
         setup() {
             const store = useStore();
             store.dispatch('mutations/updateMutationsAction', mutations);
-            // store.dispatch('mutations/updatesourcesAction', 'freebayes');
+            store.dispatch('sources/updateSourcesAction', 'freebayes');
         }
     };
 </script>

@@ -11,8 +11,9 @@
             const mutations = computed(() => {
                 return store.state.mutations.mutations;
             });
-
-            const algoRef = ref('');
+            const sourceStored = computed(() => {
+                return store.state.sources.sources;
+            });
 
             const headers = ref([
                 { key: 'position', label: 'Position' },
@@ -31,7 +32,7 @@
                         let filters = [...new Set(mutation.supports.map(filter => filter.filters).flat())];
                         let sources = [...new Set(mutation.supports.map(filter => filter.source))];
                         let alt_depth = mutation.supports.filter(filter => {
-                            if (filter.source === algoRef.value) {
+                            if (filter.source === sourceStored.value) {
                                 return filter;
                             }
                         });
