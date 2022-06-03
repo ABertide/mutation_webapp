@@ -11,7 +11,9 @@
         <va-input class="mb-4 ml-4" v-model="sourceFilter" label="Algorythm detector filter" placeholder="..." />
         <va-input class="mb-4 ml-4" v-model="alt_depthFilter" label="Mutation observed filter" placeholder="..." />
     </div>
-    <va-data-table :items="mutationsToTable" :columns="headers" :hoverable="true"> </va-data-table>
+    <va-data-table :items="mutationsToTable" :columns="headers" :hoverable="true">
+        <template #cell(score)="data"> <va-icon size="large" :color="data.value" name="square" /> </template>
+    </va-data-table>
 </template>
 
 <script>
@@ -72,12 +74,18 @@
                             HGVSp = annotation.changes.HGVSp;
                         }
 
+                        const score = annotation.pathogenicity.CADD_phred;
+                        const r = score * 8.5;
+                        const g = 255 - score * 8.5;
+                        const hex = rgbToHex(r, g, 0);
+                        console.log(hex);
+
                         if (alt_depth[0] !== undefined) {
                             return {
                                 position: `${mutation.coord.region}:${mutation.coord.pos}`,
                                 gene: symbol,
                                 hgvsp: HGVSp,
-                                score: annotation.pathogenicity.CADD_phred,
+                                score: hex,
                                 pop_AF: pop_AF,
                                 filters: filters.join(', '),
                                 source: sources.join(', '),
@@ -129,6 +137,10 @@
                     });
                 }
                 return mutationListFlatten;
+            };
+
+            const rgbToHex = (r, g, b) => {
+                return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
             };
 
             return { headers, mutationsToTable, posFilter, geneFilter, hgvspFilter, scoreFilter, pop_AfFilter, filtersFilter, sourceFilter, alt_depthFilter, mutations };
