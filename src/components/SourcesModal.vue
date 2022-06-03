@@ -1,6 +1,6 @@
 <template>
     <!-- Dialog box to chose an algorythm source -->
-    <div class="mb-4">Source selected: {{ selected }}</div>
+    <div class="mb-4">Source selected: {{ selectedSource }}</div>
     <div class="mb-4">
         <va-button @click="showModal = !showModal"> Source filter</va-button>
         <va-modal v-model="showModal" title="Source filter">
@@ -18,7 +18,6 @@
         setup() {
             // Hide or show Dialog box
             const showModal = ref(false);
-
             // Get stored value
             const store = useStore();
             const mutations = computed(() => {
@@ -27,12 +26,15 @@
             const sourceStored = computed(() => {
                 return store.state.sources.sources;
             });
+            const selectedSource = computed(() => {
+                return sourceStored.value;
+            });
 
             const selected = ref(sourceStored.value);
 
             // Get all sources
-            const sources = ref(
-                [
+            const sources = computed(() => {
+                return [
                     ...new Set(
                         mutations.value
                             .map(mutation => {
@@ -40,15 +42,15 @@
                             })
                             .flat()
                     )
-                ].flat()
-            );
+                ].flat();
+            });
 
             // onChange for selected source
             watch(selected, newSelected => {
                 store.dispatch('sources/updateSourcesAction', newSelected);
             });
 
-            return { sources, showModal, selected };
+            return { sources, showModal, selected, selectedSource };
         }
     };
 </script>

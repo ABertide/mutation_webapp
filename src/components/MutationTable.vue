@@ -4,8 +4,6 @@
         <va-input class="mb-4 ml-4" v-model="posFilter" label="Position filter" placeholder="..." />
         <va-input class="mb-4 ml-4" v-model="geneFilter" label="Gene filter" placeholder="..." />
         <va-input class="mb-4 ml-4" v-model="hgvspFilter" label="HGSVp filter" placeholder="..." />
-
-        <va-input class="mb-4 ml-4" v-model="scoreFilter" label="Delition Score filter" placeholder="..." />
         <va-input class="mb-4 ml-4" v-model="pop_AfFilter" label="Population Frequency filter" placeholder="..." />
         <va-input class="mb-4 ml-4" v-model="filtersFilter" label="Tags filter" placeholder="..." />
 
@@ -127,9 +125,6 @@
                 }
                 if (hgvspFilter.value !== '') {
                     mutationListFlatten = filterMethod(hgvspFilter, mutationListFlatten, 'hgvsp');
-                }
-                if (scoreFilter.value !== '') {
-                    mutationListFlatten = filterMethod(scoreFilter, mutationListFlatten, 'score');
                 }
                 if (pop_AfFilter.value !== '') {
                     mutationListFlatten = filterMethod(pop_AfFilter, mutationListFlatten, 'pop_AF');
