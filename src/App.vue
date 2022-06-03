@@ -1,14 +1,24 @@
 <template>
+    <SourcesModal />
     <MutationTable />
 </template>
 
 <script>
     import MutationTable from './components/MutationTable.vue';
+    import SourcesModal from './components/SourcesModal.vue';
+    import mutations from '@/data/data';
+    import { useStore } from 'vuex';
 
     export default {
         name: 'App',
         components: {
-            MutationTable
+            MutationTable,
+            SourcesModal
+        },
+        setup() {
+            const store = useStore();
+            store.dispatch('mutations/updateMutationsAction', mutations);
+            // store.dispatch('mutations/updatesourcesAction', 'freebayes');
         }
     };
 </script>
