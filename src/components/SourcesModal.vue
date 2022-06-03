@@ -1,6 +1,6 @@
 <template>
-    Source selected: {{ selected }}
-    <div>
+    <div class="mb-4">Source selected: {{ selected }}</div>
+    <div class="mb-4">
         <va-button @click="showModal = !showModal"> Source filter</va-button>
         <va-modal v-model="showModal" title="Source filter">
             <va-radio v-for="(option, index) in sources" :key="index" v-model="selected" :option="option" />
